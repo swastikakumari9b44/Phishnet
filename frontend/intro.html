@@ -3,9 +3,9 @@
 <head>
 
 <meta charset="UTF-8">
-<title>AI Phishing & Social Engineering Detector</title>
+<title>AI Social Engineering & Phishing Detector</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
 <style>
 
@@ -14,43 +14,36 @@ margin:0;
 padding:0;
 box-sizing:border-box;
 font-family:'Inter',sans-serif;
+scroll-behavior:smooth;
 }
 
 body{
-
-height:100vh;
 background:#020617;
 color:white;
-overflow:hidden;
-
+overflow-x:hidden;
 }
 
 /* GRID BACKGROUND */
 
 body::before{
-
 content:"";
-position:absolute;
+position:fixed;
+top:0;
+left:0;
 width:100%;
 height:100%;
-
 background-image:
 linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
 linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-
 background-size:50px 50px;
-
 z-index:0;
-
 }
 
-/* CONTAINER */
+/* HERO */
 
-.container{
-
+.hero{
 position:relative;
 z-index:2;
-
 height:100vh;
 display:flex;
 flex-direction:column;
@@ -58,127 +51,98 @@ justify-content:center;
 align-items:center;
 text-align:center;
 padding:40px;
-
 }
 
-/* LOGO */
-
 .logo{
-
 position:absolute;
 top:30px;
 left:40px;
-
 font-weight:700;
 font-size:20px;
-
 }
 
 .logo span{
-
 color:#22c55e;
-
 }
 
-/* HERO TITLE */
+.tag{
+position:absolute;
+top:120px;
+background:#0f172a;
+border:1px solid #1e293b;
+padding:6px 14px;
+border-radius:20px;
+font-size:14px;
+color:#94a3b8;
+}
 
 h1{
-font-family: 'Baloo 2', cursive;
-font-size: 74px;
-font-weight: 800;
-line-height: 1.0;
-letter-spacing: 0.01em;
+font-size:64px;
+font-weight:800;
+line-height:1.1;
 }
 
-.highlight {
+.highlight{
     background: linear-gradient(90deg,#22c55e,#38bdf8);
     background-clip: text;
     -webkit-background-clip: text;
-    color: transparent;
-    display: inline-block;
-    filter: drop-shadow(0 0 32px rgba(34,197,94,0.25));
+    -webkit-text-fill-color: transparent;
 }
 
-
-/* SUBTEXT */
-
 .subtitle{
-
-max-width:700px;
-margin-top:25px;
+max-width:650px;
+margin-top:20px;
 color:#94a3b8;
 font-size:18px;
 line-height:1.6;
-
 }
 
 /* BUTTONS */
 
 .buttons{
-
 margin-top:45px;
 display:flex;
 gap:20px;
-
 }
 
 .primary{
-
-padding:16px 38px;
+padding:16px 40px;
 border:none;
 border-radius:40px;
-
 background:linear-gradient(90deg,#22c55e,#16a34a);
 color:white;
-
-font-weight:600;
 font-size:16px;
-
+font-weight:600;
 cursor:pointer;
-
 box-shadow:0 10px 25px rgba(34,197,94,0.4);
-
 transition:0.3s;
-
 }
 
 .primary:hover{
-
 transform:scale(1.07);
-
 }
 
 .secondary{
-
-padding:16px 30px;
+padding:16px 35px;
 border-radius:40px;
 border:1px solid #334155;
-
 background:transparent;
 color:#cbd5f5;
-
 cursor:pointer;
-
 transition:0.3s;
-
 }
 
 .secondary:hover{
-
 background:#0f172a;
-
 }
 
-/* FLOATING GRAPHICS */
+/* FLOATING ICONS */
 
 .icon{
-
 position:absolute;
 font-size:26px;
-opacity:0.3;
-
+opacity:0.35;
 animation:float 6s infinite ease-in-out;
-
 }
 
 .icon1{top:20%;left:10%}
@@ -187,28 +151,84 @@ animation:float 6s infinite ease-in-out;
 .icon4{bottom:20%;right:10%}
 
 @keyframes float{
-
 0%{transform:translateY(0)}
 50%{transform:translateY(-15px)}
 100%{transform:translateY(0)}
+}
+
+/* HOW IT WORKS SECTION */
+
+.stepsSection{
+position:relative;
+z-index:2;
+padding:100px 40px;
+text-align:center;
+background:#020617;
+}
+
+.stepsSection h2{
+font-size:38px;
+margin-bottom:50px;
+}
+
+.stepsGrid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:25px;
+max-width:1100px;
+margin:auto;
+}
+
+.stepCard{
+background:#0f172a;
+padding:30px;
+border-radius:14px;
+border:1px solid rgba(255,255,255,0.05);
+transition:0.3s;
+}
+
+.stepCard:hover{
+transform:translateY(-10px);
+box-shadow:0 20px 35px rgba(0,0,0,0.6);
+}
+
+.stepNumber{
+font-size:22px;
+color:#22c55e;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.stepTitle{
+font-weight:600;
+margin-bottom:8px;
+}
+
+.stepText{
+color:#94a3b8;
+font-size:14px;
+line-height:1.6;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+h1{
+font-size:42px;
+}
+
+.stepsGrid{
+grid-template-columns:1fr 1fr;
+}
 
 }
 
-/* VERSION TAG */
+@media(max-width:600px){
 
-.tag{
-
-position:absolute;
-top:120px;
-
-background:#0f172a;
-border:1px solid #1e293b;
-
-padding:6px 14px;
-border-radius:20px;
-
-font-size:14px;
-color:#94a3b8;
+.stepsGrid{
+grid-template-columns:1fr;
+}
 
 }
 
@@ -216,26 +236,27 @@ color:#94a3b8;
 
 </head>
 
+
 <body>
 
 <div class="logo">
 AI <span>Secure</span>
 </div>
 
-<div class="container">
+<section class="hero">
 
 <div class="tag">
 🟢 AI Security Model v1.0 Live
 </div>
 
 <h1>
+
 <span class="highlight">PhishNet</span>
 </h1>
 
 <p class="subtitle">
-Our AI detects phishing links and social engineering messages by
-analyzing manipulation tactics, suspicious URLs, and behavioral patterns
-to keep users safe from cyber threats.
+Our AI system analyzes suspicious messages and URLs to detect phishing
+and social engineering attacks before they harm users.
 </p>
 
 <div class="buttons">
@@ -244,27 +265,81 @@ to keep users safe from cyber threats.
 Start Security Scan
 </button>
 
-<button class="secondary">
+<button class="secondary" onclick="scrollSteps()">
 How It Works
 </button>
 
 </div>
 
-</div>
+</section>
 
-<!-- Floating graphics -->
+
+<!-- FLOATING GRAPHICS -->
 
 <div class="icon icon1">🛡</div>
 <div class="icon icon2">🔍</div>
 <div class="icon icon3">⚠</div>
 <div class="icon icon4">🔐</div>
 
+
+<!-- HOW IT WORKS -->
+
+<section id="steps" class="stepsSection">
+
+<h2>How Our AI Detects Attacks</h2>
+
+<div class="stepsGrid">
+
+<div class="stepCard">
+<div class="stepNumber">1</div>
+<div class="stepTitle">User Input</div>
+<div class="stepText">
+User enters a suspicious message or URL for security analysis.
+</div>
+</div>
+
+<div class="stepCard">
+<div class="stepNumber">2</div>
+<div class="stepTitle">Feature Extraction</div>
+<div class="stepText">
+The system analyzes keywords, domain patterns, and psychological
+manipulation signals used in phishing attacks.
+</div>
+</div>
+
+<div class="stepCard">
+<div class="stepNumber">3</div>
+<div class="stepTitle">AI Threat Detection</div>
+<div class="stepText">
+Machine learning models classify whether the content is safe,
+suspicious, or a phishing attempt.
+</div>
+</div>
+
+<div class="stepCard">
+<div class="stepNumber">4</div>
+<div class="stepTitle">Security Report</div>
+<div class="stepText">
+The system generates a risk score, explains detected threats,
+and provides safety recommendations.
+</div>
+</div>
+
+</div>
+
+</section>
+
+
 <script>
 
 function startApp(){
+window.location.href="index.html";
+}
 
-window.location.href="index.html"
-
+function scrollSteps(){
+document.getElementById("steps").scrollIntoView({
+behavior:"smooth"
+});
 }
 
 </script>

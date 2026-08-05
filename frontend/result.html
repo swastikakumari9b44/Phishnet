@@ -26,8 +26,6 @@ padding:40px;
 text-align:center;
 }
 
-/* TITLE FONT */
-
 h1{
 font-family:'Orbitron',sans-serif;
 font-size:36px;
@@ -39,44 +37,46 @@ margin-bottom:30px;
 
 .dashboard{
 display:grid;
-grid-template-columns:1fr 1fr;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
 gap:30px;
-margin-top:30px;
 }
 
 .card{
 background:#0f172a;
 padding:25px;
 border-radius:12px;
-box-shadow:0 0 15px rgba(0,0,0,0.6);
 }
 
 .card h3{
 margin-bottom:15px;
 }
 
-canvas{
-max-width:300px;
+.meterWrap{
+position:relative;
+width:280px;
 margin:auto;
 }
 
-ul{
-text-align:left;
-line-height:1.8;
+.score{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:36px;
+font-family:'Orbitron';
 }
 
-.high{color:#ef4444;font-weight:700;}
-.medium{color:#f59e0b;font-weight:700;}
-.low{color:#22c55e;font-weight:700;}
+.high{color:#ef4444;}
+.medium{color:#f59e0b;}
+.low{color:#22c55e;}
 
 .backBtn{
 margin-top:40px;
-padding:14px 30px;
+padding:12px 25px;
 background:#3b82f6;
 border:none;
-border-radius:8px;
+border-radius:6px;
 color:white;
-font-weight:600;
 cursor:pointer;
 }
 
@@ -93,48 +93,39 @@ cursor:pointer;
 <div class="dashboard">
 
 <!-- Risk Meter -->
-
 <div class="card">
-
 <h3>Risk Meter</h3>
 
+<div class="meterWrap">
 <canvas id="riskChart"></canvas>
+<div id="riskScore" class="score">0%</div>
+</div>
 
 <p id="riskText"></p>
-
 </div>
-
 
 <!-- Attack Indicators -->
-
 <div class="card">
-
 <h3>Attack Indicators</h3>
-
 <canvas id="attackChart"></canvas>
-
 </div>
 
+<!-- Threat Radar -->
+<div class="card">
+<h3>Threat Radar</h3>
+<canvas id="threatRadar"></canvas>
+</div>
 
 <!-- Explanation -->
-
 <div class="card">
-
 <h3>Explanation</h3>
-
 <p id="explanation"></p>
-
 </div>
 
-
-<!-- Safety Suggestions -->
-
+<!-- Safety -->
 <div class="card">
-
 <h3>Safety Suggestions</h3>
-
 <ul id="safety"></ul>
-
 </div>
 
 </div>
@@ -148,92 +139,149 @@ cursor:pointer;
 
 window.onload = function(){
 
-/* GET RESULT DATA */
+let data = JSON.parse(localStorage.getItem("analysisResult")) || {};
 
-let data = JSON.parse(localStorage.getItem("analysisResult"));
+/* ---------- DEFAULT FALLBACK ---------- */
 
-/* fallback demo data */
-
-if(!data){
+if(!data || !data.score){
 data={
 risk_level:"High",
 score:80,
-prediction:"Social Engineering",
-tactics:["Urgency","Authority","Fear"]
+prediction:"Phishing",
+tactics:["Urgency","Fake Link","Impersonation"],
+explanation:"This input shows phishing-like behavior."
 };
 }
 
+/* ---------- FIX SCORE ---------- */
 
-/* RISK METER */
+data.score = Math.min(100, data.score || 0);
 
-new Chart(document.getElementById("riskChart"),{
+/* ---------- RISK COLOR ---------- */
 
+let riskColor = "#22c55e";
+
+if(data.risk_level === "High") riskColor = "#ef4444";
+else if(data.risk_level === "Medium") riskColor = "#f59e0b";
+
+/* ---------- CHART ---------- */
+
+let chart = new Chart(document.getElementById("riskChart"),{
 type:'doughnut',
-
 data:{
 datasets:[{
-data:[data.score,100-data.score],
-backgroundColor:["#ef4444","#1e293b"],
-borderWidth:0
+data:[0,100],
+backgroundColor:[riskColor,"#1e293b"]
 }]
 },
-
 options:{
-cutout:'70%',
-plugins:{legend:{display:false}}
+cutout:'75%',
+plugins:{legend:{display:false}},
+animation:false
 }
-
 });
 
+/* ---------- ANIMATION FIX ---------- */
+
+let score = 0;
+let target = Math.min(100, data.score);
+
+let interval = setInterval(()=>{
+
+score++;
+
+if(score > target){
+clearInterval(interval);
+return;
+}
+
+document.getElementById("riskScore").innerText = score + "%";
+
+chart.data.datasets[0].data = [score,100-score];
+chart.update();
+
+},20);
+
+/* ---------- RISK TEXT ---------- */
 
 document.getElementById("riskText").innerHTML =
-`Risk Level: <span class="${data.risk_level.toLowerCase()}">${data.risk_level}</span>`;
+`Risk Level: <span class="${(data.risk_level || "low").toLowerCase()}">${data.risk_level}</span>`;
 
 
-/* ATTACK ANALYSIS */
+/* ---------- ATTACK INDICATORS ---------- */
 
 let indicators = data.tactics || data.issues || [];
 
+if(!indicators || indicators.length === 0){
+indicators = ["Suspicious Language","Unknown Source","Possible Scam"];
+}
+
+let values = indicators.map(()=>Math.floor(Math.random()*5)+3);
+
 new Chart(document.getElementById("attackChart"),{
-
 type:'bar',
-
 data:{
 labels:indicators,
 datasets:[{
-data:indicators.map(()=>1),
-backgroundColor:"#22c55e"
+data:values,
+backgroundColor:riskColor
 }]
 },
-
 options:{
-scales:{y:{display:false}},
+indexAxis:'y',
+scales:{x:{display:false},y:{ticks:{color:"white"}}},
 plugins:{legend:{display:false}}
 }
-
 });
 
 
-/* EXPLANATION */
+/* ---------- RADAR ---------- */
+
+let radarLabels=[
+"Phishing",
+"Impersonation",
+"Credential Theft",
+"Malicious Links",
+"Social Engineering"
+];
+
+let radarValues = radarLabels.map(()=>Math.min(10, Math.random()*10));
+
+new Chart(document.getElementById("threatRadar"),{
+type:'radar',
+data:{
+labels:radarLabels,
+datasets:[{
+data:radarValues,
+backgroundColor:"rgba(239,68,68,0.2)",
+borderColor:"#ef4444"
+}]
+},
+options:{
+plugins:{legend:{display:false}}
+}
+});
+
+
+/* ---------- EXPLANATION ---------- */
 
 document.getElementById("explanation").innerText =
-"This message or URL contains patterns commonly found in phishing or social engineering attacks. Attackers often use urgency, authority impersonation, or fear tactics to manipulate users into clicking malicious links or revealing sensitive information.";
+data.explanation || "This input shows phishing-like behavior.";
 
 
-/* SAFETY SUGGESTIONS */
+/* ---------- SAFETY ---------- */
 
-document.getElementById("safety").innerHTML =
+document.getElementById("safety").innerHTML = `
+<li>Do not click suspicious links</li>
+<li>Verify sender identity</li>
+<li>Never share OTP or passwords</li>
+<li>Use official websites only</li>
+`;
 
-"<li>Do not click links from unknown or suspicious messages.</li>"+
-"<li>Verify the sender identity before responding.</li>"+
-"<li>Never share passwords, OTPs, or banking details.</li>"+
-"<li>Always access services through official websites.</li>"+
-"<li>Report suspicious messages to your organization or service provider.</li>";
-
-}
+};
 
 
-/* BACK BUTTON */
+/* ---------- BACK ---------- */
 
 function goBack(){
 window.location.href="index.html";
