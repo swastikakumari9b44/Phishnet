@@ -552,8 +552,10 @@ and:
 AI/ML & Full-Stack Developer
 
 * GitHub: https://github.com/swastikakumari9b44
-* LinkedIn: **[Add your LinkedIn URL]**
-* Email: **[Add your professional email]**
+* LinkedIn: **[www.linkedin.com/in/swastika-kumari-3525b7403
+
+]**
+* Email: **[swastikakumari9b44@gmail.com]
 
 ---
 
