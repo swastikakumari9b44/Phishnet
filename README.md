@@ -176,17 +176,8 @@ Risk Assessment
 
 ### Screenshot
 
-```text
-Screenshot
-    ↓
-Tesseract OCR
-    ↓
-Extracted Text
-    ↓
-Text Analysis Pipeline
-    ↓
-Threat Assessment
-```
+<img width="1783" height="888" alt="Screenshot 2026-08-27 145812" src="https://github.com/user-attachments/assets/04258400-9aaa-4b44-8eb0-8d7565f952a5" />
+
 
 ---
 
